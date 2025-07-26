@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz App</title>
+</head>
+<body>
+  <h1 id="quiz-title"></h1>
+  <p id="quiz-desc"></p>
+  <div id="quiz-container"></div>
+  <button id="submit-btn">Submit</button>
+  <div id="result"></div>
+
+  <script>
+    async function loadQuiz(jsonPath) {
+      try {
+        const res = await fetch(jsonPath);
+        const quiz = await res.json();
+        renderQuiz(quiz);
+      } catch (error) {
+        console.error("Error loading quiz:", error);
+      }
+    }
+
+    function renderQuiz(quiz) {
+      document.getElementById("quiz-title").textContent = quiz.title;
+      document.getElementById("quiz-desc").textContent = quiz.description;
+
+      const container = document.getElementById("quiz-container");
+      container.innerHTML = "";
+
+      quiz.questions.forEach((q, index) => {
+        const qDiv = document.createElement("div");
+        qDiv.classList.add("question");
+
+        // Add question text
+        const qText = document.createElement("p");
+        qText.innerHTML = `<strong>Q${index + 1}:</strong> ${q.question}`;
+        qDiv.appendChild(qText);
+
+        // Add options
+        q.options.forEach((opt, i) => {
+          const id = `q${index}_opt${i}`;
+
+          const label = document.createElement("label");
+          label.setAttribute("for", id);
+
+          const radio = document.createElement("input");
+          radio.type = "radio";
+          radio.name = `q${index}`;
+          radio.id = id;
+          radio.value = i;
+
+          label.appendChild(radio);
+          label.append(` ${opt}`);
+          qDiv.appendChild(label);
+          qDiv.appendChild(document.createElement("br"));
+        });
+
+        container.appendChild(qDiv);
+      });
+
+      // Handle submit button
+      document.getElementById("submit-btn").onclick = () => {
+        let score = 0;
+
+        quiz.questions.forEach((q, i) => {
+          const selected = document.querySelector(`input[name="q${i}"]:checked`);
+          if (selected && parseInt(selected.value) === q.correctIndex) {
+            score++;
+          }
+        });
+
+        const total = quiz.questions.length;
+        document.getElementById("result").innerHTML = `<h2>Your Score: ${score} / ${total}</h2>`;
+      };
+    }
+
+    // Example usage
+    // You must have a `quiz.json` in the same directory or use any correct path
+    loadQuiz("quiz.json");
+  </script>
+</body>
+</html>

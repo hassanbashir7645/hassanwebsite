@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { HRProvider } from './contexts/HRContext';
-import Sidebar from './components/Sidebar';
+import Sidebar from './components/sidebar';
 import Dashboard from './pages/Dashboard';
 import EmployeeManagement from './pages/EmployeeManagement';
 import Departments from './pages/Departments';
 import Onboarding from './pages/Onboarding';
 import PsychometricTests from './pages/PsychometricTests';
 import TaskManagement from './pages/TaskManagement';
-import TaskRequests from './pages/TaskRequests';
+import TaskRequests from './pages/TaskRequest';
 import Announcements from './pages/Announcements';
 import Recognition from './pages/Recognition';
 import Logistics from './pages/Logistics';
